@@ -54,14 +54,14 @@ async def get_time():
 
 @app.get("/visits")
 async def get_visits():
-    if not path.exists('data/visits.json'):
+    if not path.exists('app_python/data/visits.json'):
         with open('visits.json', 'w') as f:
             pass
     def iterfile():
-        with open("data/visits.json", mode="r") as file:
+        with open("app_python/data/visits.json", mode="r") as file:
             yield from file
     return StreamingResponse(iterfile())
 
 async def write_time(time):
-    with open("data/visits.json", "a") as file:
+    with open("app_python/data/visits.json", "a") as file:
         file.write(f"Accessed at: {time}\n")
