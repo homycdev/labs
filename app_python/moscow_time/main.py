@@ -1,13 +1,13 @@
+import os.path
 from datetime import datetime
 
 import json
 import requests
 from fastapi import FastAPI
 from os import path
-from fastapi.responses import FileResponse, HTMLResponse, StreamingResponse
+from fastapi.responses import HTMLResponse, StreamingResponse
 
 app = FastAPI()
-
 
 @app.get("/", response_class=HTMLResponse)
 async def get_time():
@@ -52,12 +52,24 @@ async def get_time():
         return HTMLResponse(content=html_content % (style, error),
                             status_code=404)
 
+
 @app.get("/visits")
 async def get_visits():
-    if not path.exists('data/visits.json'):
+    if not path.exists('./app_python/data/visits.json'):
         with open('visits.json', 'w') as f:
             pass
     def iterfile():
-        with open("data/visits.json", mode="r") as file:
+        with open("./app_python/data/visits.json", mode="r") as file:
             yield from file
     return StreamingResponse(iterfile())
+
+
+async def write_time(time):
+    doesExist = os.path.exists("/app_python/data/")
+    if not doesExist:
+        os.makedirs("./app_python/data")
+        with open("./app_python/data/visits.json", "a") as file:
+            file.write(f"Accessed at: {time}\n")
+    else:
+        with open("./app_python/data/visits.json", "a") as file:
+            file.write(f"Accessed at: {time}\n")
