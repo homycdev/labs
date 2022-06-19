@@ -4,7 +4,7 @@ import json
 import requests
 from fastapi import FastAPI
 from os import path
-from os import getcwd
+from os import getcwd, listdir
 from fastapi.responses import HTMLResponse, StreamingResponse
 
 app = FastAPI()
@@ -15,7 +15,9 @@ def cwd():
     print("\n DEBUGGING PURPOSES ONLY")
     print("\n I AM IN THIS DIRECTORY")
     print(debugPath)
+    print(listdir(debugPath))
     print("\n DEBUGGING PURPOSES ONLY")
+    print(listdir("."))
     debugPath
 
 
@@ -77,5 +79,5 @@ async def get_visits():
 
 
 async def write_time(time):
-    with open("app_python/data/visits.json", "a") as file:
+    with open("labs/data/visits.json", "a") as file:
         file.write(f"Accessed at: {time}\n")
