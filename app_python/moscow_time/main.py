@@ -8,12 +8,16 @@ from os import getcwd
 from fastapi.responses import HTMLResponse, StreamingResponse
 
 app = FastAPI()
-debugPath = getcwd()
 
-print("\n DEBUGGING PURPOSES ONLY")
-print("\n I AM IN THIS DIRECTORY")
-print(debugPath)
-print("\n DEBUGGING PURPOSES ONLY")
+
+def cwd():
+    debugPath = getcwd()
+    print("\n DEBUGGING PURPOSES ONLY")
+    print("\n I AM IN THIS DIRECTORY")
+    print(debugPath)
+    print("\n DEBUGGING PURPOSES ONLY")
+    debugPath
+
 
 @app.get("/", response_class=HTMLResponse)
 async def get_time():
@@ -58,15 +62,19 @@ async def get_time():
         return HTMLResponse(content=html_content % (style, error),
                             status_code=404)
 
+
 @app.get("/visits")
 async def get_visits():
     if not path.exists('data/visits.json'):
         with open('visits.json', 'w') as f:
             pass
+
     def iterfile():
         with open("data/visits.json", mode="r") as file:
             yield from file
+
     return StreamingResponse(iterfile())
+
 
 async def write_time(time):
     with open("app_python/data/visits.json", "a") as file:

@@ -2,6 +2,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from moscow_time.main import app
+from moscow_time.main import cwd
 
 client = TestClient(app)
 
@@ -12,4 +13,5 @@ client = TestClient(app)
 )
 def test_get_time(path, expected):
     response = client.get(path)
+    print(cwd())
     assert response.status_code == expected
