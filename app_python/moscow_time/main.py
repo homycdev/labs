@@ -17,7 +17,7 @@ def cwd():
     print(debugPath)
     print(listdir(debugPath))
     print("\n DEBUGGING PURPOSES ONLY")
-    print(listdir("."))
+    print(listdir("./app_python"))
     debugPath
 
 
