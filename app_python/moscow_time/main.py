@@ -1,3 +1,4 @@
+import os.path
 from datetime import datetime
 
 import json
@@ -67,17 +68,23 @@ async def get_time():
 
 @app.get("/visits")
 async def get_visits():
-    if not path.exists('app_python/data/visits.json'):
+    if not path.exists('./app_python/data/visits.json'):
         with open('visits.json', 'w') as f:
             pass
 
     def iterfile():
-        with open("app_python/data/visits.json", mode="r") as file:
+        with open("./app_python/data/visits.json", mode="r") as file:
             yield from file
 
     return StreamingResponse(iterfile())
 
 
 async def write_time(time):
-    with open("app_python/data/visits.json", "a") as file:
-        file.write(f"Accessed at: {time}\n")
+    doesExist = os.path.exists("/app_python/data/")
+    if not doesExist:
+        os.makedirs("./app_python/data")
+        with open("./app_python/data/visits.json", "a") as file:
+            file.write(f"Accessed at: {time}\n")
+    else:
+        with open("./app_python/data/visits.json", "a") as file:
+            file.write(f"Accessed at: {time}\n")
