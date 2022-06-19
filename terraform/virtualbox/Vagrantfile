@@ -6,7 +6,7 @@
 # Box / OS
 VAGRANT_BOX = 'ubuntu/bionic64'
 # Memorable name for your
-VM_NAME = 'labs-vm'
+VM_NAME = 'devops-vm'
 # VM User — 'vagrant' by default
 VM_USER = 'vagrant'
 # Username on your Mac
@@ -26,7 +26,7 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "../../ansible/playbooks/app_python/weather.yml"
+    ansible.playbook = "../../ansible/playbooks/docker/main.yml"
     ansible.config_file = "../../ansible/ansible.cfg"
     ansible.verbose = true
   end
