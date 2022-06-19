@@ -61,3 +61,7 @@ async def get_visits():
         with open("data/visits.json", mode="r") as file:
             yield from file
     return StreamingResponse(iterfile())
+
+async def write_time(time):
+    with open("data/visits.json", "a") as file:
+        file.write(f"Accessed at: {time}\n")
