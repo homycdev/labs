@@ -12,6 +12,6 @@ client = TestClient(app)
     [("/", 200), ("/something", 404), ("/time", 404), ("/timezone", 404)],
 )
 def test_get_time(path, expected):
-    response = client.get(path)
     print(cwd())
+    response = client.get(path)
     assert response.status_code == expected
