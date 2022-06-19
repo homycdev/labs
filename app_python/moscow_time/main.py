@@ -4,6 +4,7 @@ import json
 import requests
 from fastapi import FastAPI
 from os import path
+from os import getcwd
 from fastapi.responses import FileResponse, HTMLResponse, StreamingResponse
 
 app = FastAPI()
@@ -54,14 +55,21 @@ async def get_time():
 
 @app.get("/visits")
 async def get_visits():
-    if not path.exists('app_python/data/visits.json'):
+    if not path.exists('data/visits.json'):
         with open('visits.json', 'w') as f:
             pass
     def iterfile():
-        with open("app_python/data/visits.json", mode="r") as file:
+        with open("data/visits.json", mode="r") as file:
             yield from file
     return StreamingResponse(iterfile())
 
 async def write_time(time):
     with open("app_python/data/visits.json", "a") as file:
         file.write(f"Accessed at: {time}\n")
+
+debugPath = getcwd()
+
+print("\n DEBUGGING PURPOSES ONLY")
+print("\n I AM IN THIS DIRECTORY")
+print(debugPath)
+print("\n DEBUGGING PURPOSES ONLY")
