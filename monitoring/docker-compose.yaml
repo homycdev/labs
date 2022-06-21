@@ -1,0 +1,85 @@
+version: '2.4'
+
+x-logging:
+  &default-logging
+  options:
+    tag: "{{ .ImageName }}|{{ .Name }}"
+    max-size: '100m'
+    max-file: '3'
+  driver: json-file
+
+x-resources:
+  &default-resources
+  cpus: 0.3
+  mem_limit: 100M
+
+x-custom:
+  &default-set
+  logging: *default-logging
+  networks:
+    - logging
+  <<: *default-resources
+
+networks:
+  logging:
+
+volumes:
+  grafana-data:
+  loki-data:
+  promtail-data:
+  prometheus-data:
+  app-data:
+
+services:
+  app:
+    image: homycdev/labs:${APP_TAG}
+    container_name: monitoring-app
+    volumes: 
+      - app-data:/home/app/data
+    ports:
+      - "8000:8000"
+    <<: *default-set
+      
+
+  loki:
+    image: grafana/loki:${LOKI_TAG}
+    container_name: monitoring-loki
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - grafana-data:/var/lib/grafana
+    <<: *default-set
+
+  promtail:
+    image: grafana/promtail:${PROMTAIL_TAG}
+    container_name: monitoring-promtail
+    ports:
+      - "9080:9080"
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - ./promtail.yml:/etc/promtail/promtail.yml:ro
+      - promtail-data:/var/lib/promtail/positions
+    command: -config.file=/etc/promtail/promtail.yml
+    <<: *default-set
+
+  grafana:
+    image: grafana/grafana:${GRAFANA_TAG}
+    container_name: monitoring-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - loki-data:/tmp/loki/
+    <<: *default-set
+
+  prometheus:
+    image: prom/prometheus:${PROMETHEUS_TAG}
+    container_name: monitoring-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    command: --config.file=/etc/prometheus/prometheus.yml
+    <<: *default-set
+
