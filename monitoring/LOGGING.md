@@ -6,11 +6,8 @@
 
 
 ## Screenshots
-![Grafana Explore](images/grafana.png)
 
 ![Promtail](images/promtail.png)
-
-![App logs](images/grafana-app.png)
 
 ![Loki logs](images/grafana-loki.png)
 
