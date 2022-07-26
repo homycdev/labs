@@ -5,4 +5,4 @@ metadata:
   name: {{ .Release.Name }}-configmap
 data:
   config.json: {{ .Files.Get "files/config.json" | quote }}
-{{- end}}
+{{- end }}
