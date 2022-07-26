@@ -1,0 +1,60 @@
+# Default values for my-app.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 3
+
+image:
+  repository: nufusrufus/devops
+  pullPolicy: IfNotPresent
+  tag: ci-54c99a75a2169cb0ac19dad25d0b920639454de1
+  port: 8000
+
+volumes:
+  visits: home/app/files
+  wget: home/app/wget
+
+secrets:
+  name: my-secret
+  username: my-app # Change to your secret username
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  name: app-service
+  type: LoadBalancer
+  port: 8000
+
+resources:
+  requests:
+    cpu: ".2"
+    memory: "100Mi"
+  limits:
+    cpu: ".5"
+    memory: "256Mi"
+
+statefulSet:
+  podManagementPolicy: "Parallel"
+  volumeClaimTemplates:
+    spec: 
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 256M
+
+configMap:
+  enabled: false
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
